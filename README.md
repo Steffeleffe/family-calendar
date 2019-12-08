@@ -4,7 +4,10 @@
 
 ## Building
 
-TODO
+Run this gradle task to build the uber-jar:
+```
+./gradlew quarkusBuild --uber-jar
+``` 
 
 ## Setup
 
@@ -17,10 +20,9 @@ Download the credentials and save in project root directory.
 ```
 billede:<url>
 hvem:<participants>
+```
 
-<url>:
-floorball
-https://image.flaticon.com/icons/svg/124/124171.svg
+Here, `<url>` is a link to picture; e.g. `https://image.flaticon.com/icons/svg/124/124171.svg`
 
 <participants>:
 Ada
