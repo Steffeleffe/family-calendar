@@ -12,7 +12,7 @@ import com.google.api.client.util.DateTime
 import com.google.api.client.util.store.FileDataStoreFactory
 import com.google.api.services.calendar.CalendarScopes
 import com.google.api.services.calendar.model.Event
-import org.steffeleffe.MILLISECONDS_PER_DAY
+import org.slf4j.LoggerFactory
 import org.steffeleffe.calendarservice.CalendarEvent
 import org.steffeleffe.calendarservice.EventTimeRange
 import org.steffeleffe.calendarservice.Participant
@@ -22,19 +22,14 @@ import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStreamReader
 import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZoneOffset
 import java.time.temporal.ChronoUnit
-import java.time.temporal.TemporalUnit
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
-import javax.enterprise.inject.Default
-import javax.inject.Inject
-import kotlin.streams.toList
 
 @ApplicationScoped
 open class GoogleCalendarImporter {
+
+    private val LOGGER = LoggerFactory.getLogger("GoogleCalendarImporter")
 
     private fun getEvents(calendarId: String, numberOfDaysToImport: Int) : List<CalendarEvent> {
         // Build a new authorized API client service.
@@ -58,11 +53,9 @@ open class GoogleCalendarImporter {
             .setOrderBy("startTime")
             .setSingleEvents(true)
             .execute()
-        return events.items.stream()
-                .map { parseEvent(it) }
-                .filter {
-                    eventIsTodayOrLater(it)
-                }
+        return events.items
+                .mapNotNull { parseEvent(it) }
+                .filter { eventIsTodayOrLater(it) }
                 .toList()
     }
 
@@ -73,10 +66,22 @@ open class GoogleCalendarImporter {
         return c.get(Calendar.DAY_OF_YEAR) >= today
     }
 
-    private fun parseEvent(event: Event): CalendarEvent {
-        val start: DateTime = event.start.dateTime ?: event.start.date ?: throw IllegalStateException("Error, no start date")
-        val end: DateTime = event.end.dateTime ?: event.end.date ?: throw IllegalStateException("Error, no end date")
+    private fun parseEvent(event: Event): CalendarEvent? {
+        val start: DateTime? = event.start.dateTime ?: event.start.date
+        val end: DateTime? = event.end.dateTime ?: event.end.date
 
+        if (start == null) {
+            LOGGER.warn("Ignoring event (id=${event.id},summary=${event.summary}) without start date.")
+            return null
+        }
+        if (end == null) {
+            LOGGER.warn("Ignoring event (id=${event.id},summary=${event.summary}) without end date.")
+            return null
+        }
+        if (event.summary == null) {
+            LOGGER.warn("Ignoring event (id=${event.id},start=$start,end=$end) without summary.")
+            return null
+        }
         return CalendarEvent(
             event.id,
             event.summary,
@@ -88,21 +93,24 @@ open class GoogleCalendarImporter {
     }
 
     private fun getParticipants(event: Event): Set<Participant> {
-        val regex = "hvem:(.+)".toRegex()
+        val regex = "[hH]vem:(.+)".toRegex()
         val find = regex.find(event.description ?: "")
         return when  {
             find == null -> emptySet()
             find.groupValues[1].equals("alle", ignoreCase = true) -> ConfigurationService().participants
-            else -> find.groupValues[1].split(',').map { getParticipantFromString(it) }.toSet()
+            else -> find.groupValues[1].split(',')
+                    .map { it.trim() }
+                    .mapNotNull { getParticipantFromString(it) }
+                    .toSet()
         }
     }
 
-    private fun getParticipantFromString(s: String): Participant {
-        return ConfigurationService().getParticipantIgnoreCase(s) ?: throw IllegalStateException("Unknown participant: $s")
+    private fun getParticipantFromString(s: String): Participant? {
+        return ConfigurationService().getParticipantIgnoreCase(s)
     }
 
     private fun getImageSource(event: Event): String? {
-        val regex = "billede:(.+)".toRegex()
+        val regex = "[bB]illede:(.+)".toRegex()
         val find = regex.find(event.description ?: "")
         return when {
             find != null -> find.groupValues[1]
