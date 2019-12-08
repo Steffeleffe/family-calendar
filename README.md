@@ -1,3 +1,5 @@
+![](https://github.com/steffeleffe/family-calendar/workflows/CI/badge.svg)
+
 # family-calendar
 
 ![Example](docs/screenshot.png)
