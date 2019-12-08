@@ -9,5 +9,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - uses: DeLaGuardo/setup-graalvm@2.0
+      with:
+        graalvm-version: '19.3.0.java8'
     - name: Run gradle build
       run: ./gradlew build
