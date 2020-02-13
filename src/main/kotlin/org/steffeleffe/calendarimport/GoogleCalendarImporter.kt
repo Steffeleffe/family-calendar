@@ -113,11 +113,23 @@ open class GoogleCalendarImporter {
         val regex = "[bB]illede:(.+)".toRegex()
         val find = regex.find(event.description ?: "")
         return when {
-            find != null -> find.groupValues[1]
+            find != null -> trimAnchorTag(find.groupValues[1].trim())
             event.summary.contains("vagt", ignoreCase = true) -> "sygeplejerske"
             event.summary.contains("kontordag", ignoreCase = true) -> "sygeplejerske"
             event.summary.contains("spise", ignoreCase = true) -> "spise"
             else -> null
+        }
+    }
+
+    /**
+     *  Removes any anchor href HTML tag from string
+     */
+    private fun trimAnchorTag(s: String): String {
+        val regex = "<a href=.*>(.*)</a>".toRegex()
+        val find = regex.find(s)
+        return when {
+            find != null -> find.groupValues[1]
+            else -> s
         }
     }
 
