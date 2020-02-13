@@ -26,6 +26,7 @@ hvem:<participants>
 
 Here, `<url>` is a link to picture; e.g. `https://image.flaticon.com/icons/svg/124/124171.svg`
 
+```
 <participants>:
 Ada
 Ada,Steffen
