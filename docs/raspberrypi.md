@@ -63,3 +63,6 @@ Run: `sudo nano ~/.config/lxsession/LXDE-pi/autostart` and add contents:
 @chromium-browser --noerrdialogs --incognito --kiosk http://localhost:8080/index.html
 ```
 
+## Viewing log files
+
+Log are written in /var/log/syslog.
