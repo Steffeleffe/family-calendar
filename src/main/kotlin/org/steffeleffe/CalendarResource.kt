@@ -17,7 +17,7 @@ class CalendarResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     fun getAllCalendars(): List<CalendarEvent> {
-        return calendarService.getAllCalendars(5)
+        return calendarService.getAllCalendars()
     }
 
 }
