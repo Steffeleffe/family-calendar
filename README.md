@@ -47,5 +47,5 @@ TODO
 
 # Putting it together
 
-[Raspberry Pi setup guide](docs/raspberrypi)
+[Raspberry Pi setup guide](docs/raspberrypi.md)
 
