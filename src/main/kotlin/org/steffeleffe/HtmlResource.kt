@@ -26,7 +26,7 @@ open class HtmlResource {
     @Timed(name = "timed", description = "A measure of how long it takes to fetch index page.", unit = MetricUnits.MILLISECONDS)
     @Produces(MediaType.TEXT_HTML)
     open fun hello(): String {
-        val allCalendars = calendarService.getAllCalendars(5)
+        val allCalendars = calendarService.getAllCalendars()
         val createHTML = createHTML(true, true)
         createHTML.head {
             styleLink("/style.css")
