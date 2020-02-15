@@ -20,4 +20,12 @@ class CalendarResource {
         return calendarService.getAllCalendars()
     }
 
+    @Path("/refresh")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    fun refreshCalenders(): String {
+        calendarService.refreshCache()
+        return "Caches are refreshed"
+    }
+
 }

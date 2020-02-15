@@ -31,8 +31,7 @@ class CalenderEventCache {
     }
 
     val cache: LoadingCache<String, List<CalendarEvent>> = CacheBuilder.newBuilder()
-            .maximumSize(1000)
-            .refreshAfterWrite(1, TimeUnit.MINUTES)
+            .refreshAfterWrite(5, TimeUnit.MINUTES)
             .build(CalendarEventCacheLoader())
 
 

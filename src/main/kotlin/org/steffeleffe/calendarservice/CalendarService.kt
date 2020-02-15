@@ -20,5 +20,10 @@ open class CalendarService() {
         return joinedList
     }
 
+    fun refreshCache() {
+        cache.invalidateAll()
+        getAllCalendars()
+    }
+
 }
 

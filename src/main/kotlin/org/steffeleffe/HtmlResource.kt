@@ -32,7 +32,7 @@ open class HtmlResource {
             styleLink("/style.css")
             meta {
                 httpEquiv = "refresh"
-                content = "60"
+                content = "30"
             }
         }
         createHTML.body {
