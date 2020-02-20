@@ -6,7 +6,7 @@ import org.steffeleffe.calendarservice.Participant
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
-open class ConfigurationService {
+class ConfigurationService {
 
     private val LOGGER = LoggerFactory.getLogger("ConfigurationService")
 
@@ -28,7 +28,7 @@ open class ConfigurationService {
 
     fun getColorConfigurations() : Set<ColorConfiguration> = colorConfigurations
 
-    fun getParticipantIgnoreCase(s: String): Participant? {
+    final fun getParticipantIgnoreCase(s: String): Participant? {
         val find = participants.find { it.name.equals(s, ignoreCase = true) }
         if (find == null) {
             LOGGER.warn("No participant in configuration matching string \"$s\"")

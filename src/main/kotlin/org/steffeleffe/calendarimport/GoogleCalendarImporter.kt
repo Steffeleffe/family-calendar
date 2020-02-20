@@ -27,7 +27,7 @@ import java.util.*
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
-open class GoogleCalendarImporter {
+class GoogleCalendarImporter {
 
     private val LOGGER = LoggerFactory.getLogger("GoogleCalendarImporter")
 
