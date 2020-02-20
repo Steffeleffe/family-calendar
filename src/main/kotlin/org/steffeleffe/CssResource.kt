@@ -29,7 +29,7 @@ open class CssResource {
 
     @GET
     @Timed(name = "timed", description = "A measure of how long it takes to fetch css page.", unit = MetricUnits.MILLISECONDS)
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces("text/css")
     open fun hello(): String {
         val allCalendars = calendarService.getAllCalendars()
         val usedTimes = getAllTimesUsedInEvents(allCalendars)
