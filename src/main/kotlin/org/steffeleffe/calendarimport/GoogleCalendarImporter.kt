@@ -29,7 +29,7 @@ import javax.enterprise.context.ApplicationScoped
 @ApplicationScoped
 class GoogleCalendarImporter {
 
-    private val LOGGER = LoggerFactory.getLogger("GoogleCalendarImporter")
+    private val logger = LoggerFactory.getLogger("GoogleCalendarImporter")
 
     private fun getEvents(calendarId: String, numberOfDaysToImport: Int) : List<CalendarEvent> {
         // Build a new authorized API client service.
@@ -71,15 +71,15 @@ class GoogleCalendarImporter {
         val end: DateTime? = event.end.dateTime ?: event.end.date
 
         if (start == null) {
-            LOGGER.warn("Ignoring event (id=${event.id},summary=${event.summary}) without start date.")
+            logger.warn("Ignoring event (id=${event.id},summary=${event.summary}) without start date.")
             return null
         }
         if (end == null) {
-            LOGGER.warn("Ignoring event (id=${event.id},summary=${event.summary}) without end date.")
+            logger.warn("Ignoring event (id=${event.id},summary=${event.summary}) without end date.")
             return null
         }
         if (event.summary == null) {
-            LOGGER.warn("Ignoring event (id=${event.id},start=$start,end=$end) without summary.")
+            logger.warn("Ignoring event (id=${event.id},start=$start,end=$end) without summary.")
             return null
         }
         return CalendarEvent(
@@ -134,16 +134,16 @@ class GoogleCalendarImporter {
     }
 
     companion object {
-        private val APPLICATION_NAME = "org.steffeleffe.familycalendar"
+        private const val APPLICATION_NAME = "org.steffeleffe.familycalendar"
         private val JSON_FACTORY = JacksonFactory.getDefaultInstance()
-        private val TOKENS_DIRECTORY_PATH = "tokens"
+        private const val TOKENS_DIRECTORY_PATH = "tokens"
 
         /**
          * Global instance of the scopes required by this quickstart.
          * If modifying these scopes, delete your previously saved tokens/ folder.
          */
         private val SCOPES = listOf(CalendarScopes.CALENDAR_READONLY)
-        private val CREDENTIALS_FILE_PATH = "/credentials.json"
+        private const val CREDENTIALS_FILE_PATH = "/credentials.json"
 
         /**
          * Creates an authorized Credential object.
