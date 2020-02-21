@@ -16,7 +16,7 @@ import javax.ws.rs.Produces
 import javax.ws.rs.core.MediaType
 
 @Path("/index.html")
-open class HtmlResource {
+class HtmlResource {
 
     @Inject
     @field:Default
@@ -25,7 +25,7 @@ open class HtmlResource {
     @GET
     @Timed(name = "timed", description = "A measure of how long it takes to fetch index page.", unit = MetricUnits.MILLISECONDS)
     @Produces(MediaType.TEXT_HTML)
-    open fun hello(): String {
+    fun hello(): String {
         val allCalendars = calendarService.getAllCalendars()
         val createHTML = createHTML(true, true)
         createHTML.head {
@@ -34,6 +34,7 @@ open class HtmlResource {
                 httpEquiv = "refresh"
                 content = "30"
             }
+            meta("google", "notranslate")
         }
         createHTML.body {
             div(classes = "calendar") {
