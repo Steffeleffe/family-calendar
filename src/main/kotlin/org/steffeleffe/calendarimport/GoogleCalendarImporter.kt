@@ -27,9 +27,9 @@ import java.util.*
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
-class GoogleCalendarImporter {
+open class GoogleCalendarImporter {
 
-    private val logger = LoggerFactory.getLogger("GoogleCalendarImporter")
+    private val logger = LoggerFactory.getLogger(GoogleCalendarImporter::class.java)
 
     private fun getEvents(calendarId: String, numberOfDaysToImport: Int) : List<CalendarEvent> {
         // Build a new authorized API client service.
@@ -45,7 +45,7 @@ class GoogleCalendarImporter {
         val todayTrimmedToDay = Instant.now().truncatedTo(ChronoUnit.DAYS)
         val futureTrimmedToDay = todayTrimmedToDay.plus(numberOfDaysToImport.toLong(), ChronoUnit.DAYS)
 
-        println("Fetching events from Google Calendar with id=$calendarId")
+        logger.info("Fetching events from Google Calendar with id=$calendarId")
         val events = service.events().list(calendarId)
             .setMaxResults(1000)
             .setTimeMin(DateTime(todayTrimmedToDay.toEpochMilli()))
