@@ -1,36 +1,25 @@
 package org.steffeleffe
 
 import kotlinx.css.*
-import org.steffeleffe.calendarservice.CalendarEvent
-import org.steffeleffe.calendarservice.CalendarService
-import java.util.*
-import javax.inject.Inject
-import javax.ws.rs.GET
-import javax.ws.rs.Path
-import javax.ws.rs.Produces
-import javax.ws.rs.core.MediaType
 import kotlinx.css.Float
 import kotlinx.css.properties.border
 import org.eclipse.microprofile.metrics.MetricUnits
 import org.eclipse.microprofile.metrics.annotation.Timed
+import org.steffeleffe.calendarservice.CalendarEvent
+import org.steffeleffe.calendarservice.CalendarService
 import org.steffeleffe.configurationservice.ConfigurationService
-import javax.enterprise.inject.Default
+import java.util.*
+import javax.ws.rs.GET
+import javax.ws.rs.Path
+import javax.ws.rs.Produces
 
 @Path("/style.css")
-open class CssResource {
-
-    @Inject
-    @field:Default
-    lateinit var calendarService: CalendarService
-
-    @Inject
-    @field:Default
-    lateinit var configurationService: ConfigurationService
+open class CssResource(val calendarService: CalendarService, val configurationService: ConfigurationService) {
 
     @GET
     @Timed(name = "timed", description = "A measure of how long it takes to fetch css page.", unit = MetricUnits.MILLISECONDS)
     @Produces("text/css")
-    open fun hello(): String {
+    fun hello(): String {
         val allCalendars = calendarService.getAllCalendars()
         val usedTimes = getAllTimesUsedInEvents(allCalendars)
 

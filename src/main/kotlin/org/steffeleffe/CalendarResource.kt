@@ -9,10 +9,7 @@ import javax.ws.rs.Produces
 import javax.ws.rs.core.MediaType
 
 @Path("/calendar")
-class CalendarResource {
-
-    @Inject
-    lateinit var calendarService: CalendarService
+class CalendarResource(val calendarService: CalendarService){
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

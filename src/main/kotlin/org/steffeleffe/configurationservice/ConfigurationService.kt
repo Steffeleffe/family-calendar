@@ -6,11 +6,11 @@ import org.steffeleffe.calendarservice.Participant
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
-class ConfigurationService {
+open class ConfigurationService {
 
-    private val LOGGER = LoggerFactory.getLogger("ConfigurationService")
+    private val logger = LoggerFactory.getLogger("ConfigurationService")
 
-     val participants = setOf(
+    val participants = setOf(
             Participant("Rikke", 'R'),
             Participant("Steffen", 'S'),
             Participant("Ada", 'A'),
@@ -18,7 +18,7 @@ class ConfigurationService {
             Participant("Marie", 'M')
     )
 
-    private val colorConfigurations : MutableSet<ColorConfiguration> = mutableSetOf(
+    private val colorConfigurations: MutableSet<ColorConfiguration> = mutableSetOf(
             ColorConfiguration(getParticipantIgnoreCase("Rikke")!!, Color.darkSeaGreen),
             ColorConfiguration(getParticipantIgnoreCase("Steffen")!!, Color.sandyBrown),
             ColorConfiguration(getParticipantIgnoreCase("Ada")!!, Color.hotPink),
@@ -26,12 +26,12 @@ class ConfigurationService {
             ColorConfiguration(getParticipantIgnoreCase("Marie")!!, Color.mediumVioletRed)
     )
 
-    fun getColorConfigurations() : Set<ColorConfiguration> = colorConfigurations
+    fun getColorConfigurations(): Set<ColorConfiguration> = colorConfigurations
 
     final fun getParticipantIgnoreCase(s: String): Participant? {
         val find = participants.find { it.name.equals(s, ignoreCase = true) }
         if (find == null) {
-            LOGGER.warn("No participant in configuration matching string \"$s\"")
+            logger.warn("No participant in configuration matching string \"$s\"")
         }
         return find
     }

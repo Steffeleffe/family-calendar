@@ -28,6 +28,8 @@ dependencies {
 
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
+    testImplementation 'com.willowtreeapps.assertk:assertk-jvm:0.21'
 }
 
 group 'org.steffeleffe'

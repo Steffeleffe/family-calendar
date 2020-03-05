@@ -3,9 +3,7 @@ package org.steffeleffe.calendarservice
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
-class CalendarService() {
-
-    private val cache = CalenderEventCache().cache
+open class CalendarService(val cache: CalendarEventCache) {
 
     fun getAllCalendars(): List<CalendarEvent> {
 

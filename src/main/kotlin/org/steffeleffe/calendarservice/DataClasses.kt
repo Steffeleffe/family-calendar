@@ -10,7 +10,8 @@ data class CalendarEvent(val id: String,
                          val participants: Set<Participant> = emptySet())
 
 
-data class Participant(val name: String, val abbreviation: Char)
+data class Participant(val name: String,
+                       val abbreviation: Char)
 
 data class EventTimeRange(val start: Date,
                           val end: Date)

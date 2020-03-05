@@ -7,13 +7,12 @@ import com.google.common.util.concurrent.ListenableFutureTask
 import org.steffeleffe.calendarimport.GoogleCalendarImporter
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import javax.enterprise.context.ApplicationScoped
 
+@ApplicationScoped
+open class CalendarEventCache(val googleCalendarImporter: GoogleCalendarImporter) {
 
-class CalenderEventCache {
-
-    private val numberOfDays = 5
-
-    private val googleCalendarImporter = GoogleCalendarImporter()
+    private val numberOfDays : Int = 5
 
     inner class CalendarEventCacheLoader : CacheLoader<String, List<CalendarEvent>>() {
         override fun load(key: String): List<CalendarEvent> { // no checked exception
@@ -26,13 +25,16 @@ class CalenderEventCache {
             return task
         }
 
-        private fun getEvents(key: String) : List<CalendarEvent> = googleCalendarImporter.importCalender(key, numberOfDays)
+        private fun getEvents(key: String): List<CalendarEvent> = googleCalendarImporter.importCalender(key, numberOfDays)
 
     }
 
-    val cache: LoadingCache<String, List<CalendarEvent>> = CacheBuilder.newBuilder()
+    private val cache: LoadingCache<String, List<CalendarEvent>> = CacheBuilder.newBuilder()
             .refreshAfterWrite(5, TimeUnit.MINUTES)
             .build(CalendarEventCacheLoader())
 
+    fun get(key: String): List<CalendarEvent> = cache[key]
+
+    fun invalidateAll() = cache.invalidateAll()
 
 }

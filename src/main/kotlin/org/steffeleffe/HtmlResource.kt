@@ -16,11 +16,7 @@ import javax.ws.rs.Produces
 import javax.ws.rs.core.MediaType
 
 @Path("/index.html")
-open class HtmlResource {
-
-    @Inject
-    @field:Default
-    lateinit var calendarService: CalendarService
+open class HtmlResource (val calendarService: CalendarService){
 
     @GET
     @Timed(name = "timed", description = "A measure of how long it takes to fetch index page.", unit = MetricUnits.MILLISECONDS)
