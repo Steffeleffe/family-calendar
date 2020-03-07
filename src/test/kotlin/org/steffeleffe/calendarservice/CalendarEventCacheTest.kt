@@ -5,7 +5,8 @@ import assertk.assertions.containsExactly
 import assertk.assertions.isEmpty
 import com.nhaarman.mockitokotlin2.*
 import org.junit.jupiter.api.Test
-import org.steffeleffe.calendarimport.GoogleCalendarImporter
+import org.steffeleffe.calendarimporter.CalendarImporter
+import org.steffeleffe.calendarservice.cached.CalendarEventCache
 import java.util.*
 
 class CalendarEventCacheTest {
@@ -14,7 +15,7 @@ class CalendarEventCacheTest {
     fun `should get events`() {
         val testEvent = CalendarEvent("test", "description", EventTimeRange(Date(123), Date(345)))
         val calendarId = "testCalenderUrl"
-        val importerMock : GoogleCalendarImporter = mock()
+        val importerMock : CalendarImporter = mock()
         whenever(importerMock.importCalender(eq(calendarId), any())).thenReturn(mutableListOf(testEvent))
         val cache = CalendarEventCache(importerMock)
 
@@ -28,7 +29,7 @@ class CalendarEventCacheTest {
     fun `should get no events`() {
         val testEvent = CalendarEvent("test", "description", EventTimeRange(Date(123), Date(345)))
         val calendarId = "testCalenderUrl"
-        val importerMock : GoogleCalendarImporter = mock()
+        val importerMock : CalendarImporter = mock()
         whenever(importerMock.importCalender(eq(calendarId), any())).thenReturn(mutableListOf(testEvent))
         val cache = CalendarEventCache(importerMock)
 
@@ -41,7 +42,7 @@ class CalendarEventCacheTest {
     fun `should use cached events`() {
         val testEvent = CalendarEvent("test", "description", EventTimeRange(Date(123), Date(345)))
         val calendarId = "testCalenderUrl"
-        val importerMock : GoogleCalendarImporter = mock()
+        val importerMock : CalendarImporter = mock()
         whenever(importerMock.importCalender(eq(calendarId), any())).thenReturn(mutableListOf(testEvent))
         val cache = CalendarEventCache(importerMock)
 
@@ -56,7 +57,7 @@ class CalendarEventCacheTest {
     fun `get after invalidate`() {
         val testEvent = CalendarEvent("test", "description", EventTimeRange(Date(123), Date(345)))
         val calendarId = "testCalenderUrl"
-        val importerMock : GoogleCalendarImporter = mock()
+        val importerMock : CalendarImporter = mock()
         whenever(importerMock.importCalender(eq(calendarId), any())).thenReturn(mutableListOf(testEvent))
         val cache = CalendarEventCache(importerMock)
 

@@ -1,27 +1,20 @@
 package org.steffeleffe.calendarservice
 
-import javax.enterprise.context.ApplicationScoped
+import java.util.*
 
-@ApplicationScoped
-open class CalendarService(val cache: CalendarEventCache) {
-
-    fun getAllCalendars(): List<CalendarEvent> {
-
-        val joinedList = mutableListOf<CalendarEvent>()
-
-        joinedList.addAll(cache.get("primary"))
-        joinedList.addAll(cache.get("3eq4uqnkhcgipgkdrrhs7ec6e4@group.calendar.google.com"))
-        joinedList.addAll(cache.get("rikke.vangsted@gmail.com"))
-        joinedList.addAll(cache.get("66aglhcacpcpupnhh9fian0a1g@group.calendar.google.com"))
-        joinedList.addAll(cache.get("hdn3t11kjru1fs823pee8g9bso@group.calendar.google.com"))
-
-        return joinedList
-    }
-
-    fun refreshCache() {
-        cache.invalidateAll()
-        getAllCalendars()
-    }
-
+interface CalendarService {
+    fun getAllCalendars(): List<CalendarEvent>
+    fun refresh()
 }
 
+data class CalendarEvent(
+        val id: String,
+        val description: String,
+        val timeRange: EventTimeRange,
+        val allDayEvent: Boolean = false,
+        val imageSource: String? = null,
+        val participants: Set<Participant> = emptySet())
+
+data class Participant(val name: String, val abbreviation: Char)
+
+data class EventTimeRange( val start: Date, val end: Date)
