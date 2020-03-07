@@ -7,17 +7,17 @@ import org.eclipse.microprofile.metrics.MetricUnits
 import org.eclipse.microprofile.metrics.annotation.Timed
 import org.steffeleffe.calendarservice.CalendarEvent
 import org.steffeleffe.calendarservice.CalendarService
-import org.steffeleffe.configurationservice.ConfigurationService
+import org.steffeleffe.configurationservice.DefaultConfigurationService
 import java.util.*
 import javax.ws.rs.GET
 import javax.ws.rs.Path
 import javax.ws.rs.Produces
 
 @Path("/style.css")
-open class CssResource(val calendarService: CalendarService, val configurationService: ConfigurationService) {
+open class CssResource(val calendarService: CalendarService, val configurationService: DefaultConfigurationService) {
 
     @GET
-    @Timed(name = "timed", description = "A measure of how long it takes to fetch css page.", unit = MetricUnits.MILLISECONDS)
+    @Timed(description = "A measure of how long it takes to fetch css page.", unit = MetricUnits.MILLISECONDS)
     @Produces("text/css")
     fun hello(): String {
         val allCalendars = calendarService.getAllCalendars()
@@ -117,7 +117,7 @@ open class CssResource(val calendarService: CalendarService, val configurationSe
                 fontWeight = FontWeight.bold
             }
 
-            configurationService.getColorConfigurations().forEach {
+            configurationService.colorConfigurations.forEach {
                 rule(".participant"+it.participant.name) {
                     backgroundColor = it.color
                 }

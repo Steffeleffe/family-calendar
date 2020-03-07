@@ -1,4 +1,4 @@
-package org.steffeleffe.calendarimport
+package org.steffeleffe.calendarimporter
 
 import io.quarkus.test.Mock
 import org.steffeleffe.calendarservice.CalendarEvent
@@ -8,7 +8,7 @@ import javax.enterprise.context.ApplicationScoped
 
 @Mock
 @ApplicationScoped
-class MockCalendarImporter : GoogleCalendarImporter() {
+class MockCalendarImporter : CalendarImporter {
     override fun importCalender(calendarId: String, numberOfDaysToImport: Int): List<CalendarEvent> {
         return listOf(CalendarEvent("testId", "testDescription", EventTimeRange(Date(123), Date(345))))
     }

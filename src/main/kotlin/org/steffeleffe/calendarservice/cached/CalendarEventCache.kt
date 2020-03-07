@@ -1,16 +1,17 @@
-package org.steffeleffe.calendarservice
+package org.steffeleffe.calendarservice.cached
 
 import com.google.common.cache.CacheBuilder
 import com.google.common.cache.CacheLoader
 import com.google.common.cache.LoadingCache
 import com.google.common.util.concurrent.ListenableFutureTask
-import org.steffeleffe.calendarimport.GoogleCalendarImporter
+import org.steffeleffe.calendarimporter.CalendarImporter
+import org.steffeleffe.calendarservice.CalendarEvent
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import javax.enterprise.context.ApplicationScoped
 
 @ApplicationScoped
-open class CalendarEventCache(val googleCalendarImporter: GoogleCalendarImporter) {
+open class CalendarEventCache(val calendarImporter: CalendarImporter) {
 
     private val numberOfDays : Int = 5
 
@@ -25,7 +26,7 @@ open class CalendarEventCache(val googleCalendarImporter: GoogleCalendarImporter
             return task
         }
 
-        private fun getEvents(key: String): List<CalendarEvent> = googleCalendarImporter.importCalender(key, numberOfDays)
+        private fun getEvents(key: String): List<CalendarEvent> = calendarImporter.importCalender(key, numberOfDays)
 
     }
 

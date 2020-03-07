@@ -3,13 +3,10 @@ package org.steffeleffe
 import kotlinx.html.*
 import kotlinx.html.stream.createHTML
 import org.eclipse.microprofile.metrics.MetricUnits
-import org.eclipse.microprofile.metrics.annotation.Counted
 import org.eclipse.microprofile.metrics.annotation.Timed
 import org.steffeleffe.calendarservice.CalendarEvent
 import org.steffeleffe.calendarservice.CalendarService
 import java.util.*
-import javax.enterprise.inject.Default
-import javax.inject.Inject
 import javax.ws.rs.GET
 import javax.ws.rs.Path
 import javax.ws.rs.Produces
@@ -19,7 +16,7 @@ import javax.ws.rs.core.MediaType
 open class HtmlResource (val calendarService: CalendarService){
 
     @GET
-    @Timed(name = "timed", description = "A measure of how long it takes to fetch index page.", unit = MetricUnits.MILLISECONDS)
+    @Timed(description = "A measure of how long it takes to fetch html page.", unit = MetricUnits.MILLISECONDS)
     @Produces(MediaType.TEXT_HTML)
     fun hello(): String {
         val allCalendars = calendarService.getAllCalendars()
