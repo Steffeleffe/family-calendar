@@ -13,8 +13,10 @@ data class CalendarEvent(
         val timeRange: EventTimeRange,
         val allDayEvent: Boolean = false,
         val imageSource: String? = null,
-        val participants: Set<Participant> = emptySet())
+        val participants: Set<Participant> = emptySet(),
+        var startTimeSlot: String = "",
+        var endTimeSlot: String = "")
 
 data class Participant(val name: String, val abbreviation: Char)
 
-data class EventTimeRange( val start: Date, val end: Date)
+data class EventTimeRange(val start: Date, val end: Date)

@@ -3,8 +3,6 @@ package org.steffeleffe
 import kotlinx.css.*
 import kotlinx.css.Float
 import kotlinx.css.properties.border
-import org.eclipse.microprofile.metrics.MetricUnits
-import org.eclipse.microprofile.metrics.annotation.Timed
 import org.steffeleffe.calendarservice.CalendarEvent
 import org.steffeleffe.calendarservice.CalendarService
 import org.steffeleffe.configurationservice.DefaultConfigurationService
@@ -17,7 +15,6 @@ import javax.ws.rs.Produces
 open class CssResource(val calendarService: CalendarService, val configurationService: DefaultConfigurationService) {
 
     @GET
-    @Timed(description = "A measure of how long it takes to fetch css page.", unit = MetricUnits.MILLISECONDS)
     @Produces("text/css")
     fun hello(): String {
         val allCalendars = calendarService.getAllCalendars()
@@ -66,15 +63,12 @@ open class CssResource(val calendarService: CalendarService, val configurationSe
 
                 c.time = event.timeRange.start
                 val daysFromNow = c.get(Calendar.DAY_OF_YEAR) - today
-                val startTime = c.getPaddedTimeOfDay()
-                c.time = event.timeRange.end
-                val endTime = c.getPaddedTimeOfDay()
 
                 rule(".event${event.id}") {
                     if (verticalEventSpace) {
-                        put("grid-row", "time$startTime / time$endTime")
+                        put("grid-row", "${event.startTimeSlot} / ${event.endTimeSlot}")
                     } else {
-                        put("grid-row", "time$startTime")
+                        put("grid-row", "${event.startTimeSlot}")
                     }
                     put("grid-column", "day$daysFromNow")
                     backgroundColor = randomColor()
@@ -89,12 +83,16 @@ open class CssResource(val calendarService: CalendarService, val configurationSe
                 fontSize = LinearDimension("larger")
                 fontFamily = "sans-serif"
                 textAlign = TextAlign.center
+                color = Color.white
             }
             rule(".eventTime") {
                 fontSize = LinearDimension("small")
+                fontFamily = "sans-serif"
             }
             rule(".eventDescription") {
                 fontWeight = FontWeight.bold
+                color = Color.white
+                fontFamily = "sans-serif"
             }
             rule(".eventImage") {
                 maxWidth = LinearDimension("3em")
@@ -132,20 +130,50 @@ open class CssResource(val calendarService: CalendarService, val configurationSe
 
     private fun randomColor(): Color {
         val random = Random()
-        val rgb = "#${random.nextInt(5)+5}${random.nextInt(5)+5}${random.nextInt(5)+5}"
+        val rgb = "#${random.nextInt(3)+5}${random.nextInt(3)+5}${random.nextInt(3)+5}"
         return Color(rgb)
     }
 
     private fun getAllTimesUsedInEvents(allCalendars: List<CalendarEvent>): MutableSet<String> {
         val usedTimes = mutableSetOf<String>()
 
+        val groupByDay = allCalendars.groupBy {
+            val c = Calendar.getInstance()
+            c.time = it.timeRange.start
+            c.get(Calendar.DATE)
+        }
+
+        groupByDay.forEach {
+            val groupByTimeByDay = it.value.groupBy {
+                val c = Calendar.getInstance()
+                c.time = it.timeRange.start
+                c.getPaddedTimeOfDay()
+            }
+            groupByTimeByDay.forEach {
+                for (i in 0 until it.value.size) {
+
+                    val timeslot = "${it.key}_$i"
+                    usedTimes.add(timeslot)
+                    it.value.get(i).startTimeSlot = "time"+timeslot
+
+                }
+            }
+        }
+
         allCalendars.forEach { event ->
             val c = Calendar.getInstance()
             c.time = event.timeRange.start
-            usedTimes.add(c.getPaddedTimeOfDay())
+            val paddedStartTime = c.getPaddedTimeOfDay()
+
+
+            //  usedTimes.add(c.getPaddedTimeOfDay()+event.id)
             if (verticalEventSpace) {
                 c.time = event.timeRange.end
-                usedTimes.add(c.getPaddedTimeOfDay())
+                var paddedEndTime = c.getPaddedTimeOfDay()
+                val time = if (paddedEndTime < paddedStartTime) "2400" else paddedEndTime
+
+                usedTimes.add(time)
+                event.endTimeSlot = "time" + time
             }
         }
         return usedTimes

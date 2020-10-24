@@ -1,8 +1,6 @@
 package org.steffeleffe.calendarimporter
 
 import com.google.api.services.calendar.model.Events
-import org.eclipse.microprofile.metrics.MetricUnits
-import org.eclipse.microprofile.metrics.annotation.Timed
 import org.steffeleffe.calendarimporter.google.GoogleCalendarImporterFetcher
 import org.steffeleffe.calendarimporter.google.GoogleEventParser
 import org.steffeleffe.calendarservice.CalendarEvent
@@ -18,7 +16,6 @@ open class GoogleCalendarImporter(configurationService: ConfigurationService) : 
 
     val eventParser = GoogleEventParser(configurationService)
 
-    @Timed(description = "A measure of how long it takes to fetch calendar events from Google.", unit = MetricUnits.MILLISECONDS)
     override fun importCalender(calendarId: String, numberOfDaysToImport: Int): List<CalendarEvent> {
         val events: Events = importerFetcher.fetchEvents(numberOfDaysToImport, calendarId)
 

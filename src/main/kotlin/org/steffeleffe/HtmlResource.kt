@@ -2,8 +2,6 @@ package org.steffeleffe
 
 import kotlinx.html.*
 import kotlinx.html.stream.createHTML
-import org.eclipse.microprofile.metrics.MetricUnits
-import org.eclipse.microprofile.metrics.annotation.Timed
 import org.steffeleffe.calendarservice.CalendarEvent
 import org.steffeleffe.calendarservice.CalendarService
 import java.util.*
@@ -16,7 +14,6 @@ import javax.ws.rs.core.MediaType
 open class HtmlResource (val calendarService: CalendarService){
 
     @GET
-    @Timed(description = "A measure of how long it takes to fetch html page.", unit = MetricUnits.MILLISECONDS)
     @Produces(MediaType.TEXT_HTML)
     fun hello(): String {
         val allCalendars = calendarService.getAllCalendars()
@@ -32,18 +29,18 @@ open class HtmlResource (val calendarService: CalendarService){
         createHTML.body {
             div(classes = "calendar") {
 
-                val usedTimes = mutableSetOf<String>()
 
-                allCalendars.forEach { event ->
-                    val c = Calendar.getInstance()
-                    c.time = event.timeRange.start
-                    usedTimes.add(c.getPaddedTimeOfDay())
-                    if (verticalEventSpace) {
-                        c.time = event.timeRange.end
-                        usedTimes.add(c.getPaddedTimeOfDay())
-                    }
-                }
                 if (displayTimeSlots) {
+                    val usedTimes = mutableSetOf<String>()
+                    allCalendars.forEach { event ->
+                        val c = Calendar.getInstance()
+                        c.time = event.timeRange.start
+                        usedTimes.add(c.getPaddedTimeOfDay()+event.id)
+                        if (verticalEventSpace) {
+                            c.time = event.timeRange.end
+                            usedTimes.add(c.getPaddedTimeOfDay()+event.id)
+                        }
+                    }
                     usedTimes.forEach { time ->
                         div(classes = "timeSlot$time") { +time }
                     }
