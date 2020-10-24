@@ -20,7 +20,7 @@ open class GoogleCalendarImporter(configurationService: ConfigurationService) : 
         val events: Events = importerFetcher.fetchEvents(numberOfDaysToImport, calendarId)
 
         return events.items
-                .mapNotNull { eventParser.parseEvent(it) }
+                .mapNotNull { eventParser.parseEvent(it, calendarId) }
                 .filter { eventIsTodayOrLater(it) }
                 .toList()
     }

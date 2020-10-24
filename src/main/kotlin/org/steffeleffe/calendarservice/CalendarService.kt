@@ -14,8 +14,10 @@ data class CalendarEvent(
         val allDayEvent: Boolean = false,
         val imageSource: String? = null,
         val participants: Set<Participant> = emptySet(),
-        var startTimeSlot: String = "",
-        var endTimeSlot: String = "")
+        val calendarId : String) {
+    var startTimeSlot: String = ""
+    var endTimeSlot: String = ""
+}
 
 data class Participant(val name: String, val abbreviation: Char)
 

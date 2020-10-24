@@ -8,13 +8,12 @@ import org.steffeleffe.calendarservice.EventTimeRange
 import org.steffeleffe.calendarservice.Participant
 import org.steffeleffe.configurationservice.ConfigurationService
 import java.util.*
-import javax.enterprise.context.ApplicationScoped
 
 class GoogleEventParser(private val configurationService: ConfigurationService) {
 
     private val logger = LoggerFactory.getLogger(GoogleEventParser::class.java)
 
-    internal fun parseEvent(event: Event): CalendarEvent? {
+    internal fun parseEvent(event: Event, calendarId: String): CalendarEvent? {
         val start: DateTime? = event.start.dateTime ?: event.start.date
         val end: DateTime? = event.end.dateTime ?: event.end.date
 
@@ -35,8 +34,9 @@ class GoogleEventParser(private val configurationService: ConfigurationService) 
                 event.summary,
                 EventTimeRange(Date(start.value), Date(end.value)),
                 start.isDateOnly,
-                getImageSource(event),
-                getParticipants(event)
+                getImageSource(event, calendarId),
+                getParticipants(event),
+                calendarId
         )
     }
 
@@ -61,14 +61,12 @@ class GoogleEventParser(private val configurationService: ConfigurationService) 
         return find
     }
 
-    private fun getImageSource(event: Event): String? {
+    private fun getImageSource(event: Event, calendarId: String): String? {
         val regex = "[bB]illede:(.+)".toRegex()
         val find = regex.find(event.description ?: "")
         return when {
             find != null -> trimAnchorTag(find.groupValues[1].trim())
-            event.summary.contains("vagt", ignoreCase = true) -> "sygeplejerske"
-            event.summary.contains("kontordag", ignoreCase = true) -> "sygeplejerske"
-            event.summary.contains("spise", ignoreCase = true) -> "spise"
+            calendarId == "66aglhcacpcpupnhh9fian0a1g@group.calendar.google.com" -> "sygeplejerske"
             else -> null
         }
     }
