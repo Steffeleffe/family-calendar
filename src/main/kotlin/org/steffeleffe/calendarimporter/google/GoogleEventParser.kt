@@ -66,7 +66,7 @@ class GoogleEventParser(private val configurationService: ConfigurationService) 
         val find = regex.find(event.description ?: "")
         return when {
             find != null -> trimAnchorTag(find.groupValues[1].trim())
-            calendarId == "66aglhcacpcpupnhh9fian0a1g@group.calendar.google.com" -> "sygeplejerske"
+            calendarId == "66aglhcacpcpupnhh9fian0a1g@group.calendar.google.com" -> "https://www.flaticon.com/svg/static/icons/svg/3209/3209008.svg"
             else -> null
         }
     }
