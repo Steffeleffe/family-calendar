@@ -35,21 +35,28 @@ class GoogleEventParser(private val configurationService: ConfigurationService) 
                 EventTimeRange(Date(start.value), Date(end.value)),
                 start.isDateOnly,
                 getImageSource(event, calendarId),
-                getParticipants(event),
+                getParticipants(event, calendarId),
                 calendarId
         )
     }
 
-    private fun getParticipants(event: Event): Set<Participant> {
+    private fun getParticipants(event: Event, calendarId: String): Set<Participant> {
         val regex = "[hH]vem:(.+)".toRegex()
         val find = regex.find(event.description ?: "")
-        return when  {
-            find == null -> emptySet()
-            find.groupValues[1].equals("alle", ignoreCase = true) -> configurationService.participants.toSet()
-            else -> find.groupValues[1].split(',')
-                    .map { it.trim() }
-                    .mapNotNull { getParticipantFromString(it) }
-                    .toSet()
+
+        return when {
+            find != null -> return when  {
+                find.groupValues[1].equals("alle", ignoreCase = true) -> configurationService.participants.toSet()
+                else -> find.groupValues[1].split(',')
+                        .map { it.trim() }
+                        .mapNotNull { getParticipantFromString(it) }
+                        .toSet()
+            }
+            calendarId == "66aglhcacpcpupnhh9fian0a1g@group.calendar.google.com" -> {
+                val participantFromString = getParticipantFromString("Rikke")
+                if (participantFromString == null) emptySet() else setOf(participantFromString)
+            }
+            else -> emptySet()
         }
     }
 
