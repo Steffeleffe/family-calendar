@@ -9,10 +9,10 @@ open class DefaultConfigurationService : ConfigurationService {
 
     private final val participantConfigurations = setOf(
             ParticipantConfiguration(name = "Rikke", color = Color.darkSeaGreen),
-            ParticipantConfiguration(name = "Steffen", color = Color.sandyBrown),
+            ParticipantConfiguration(name = "Steffen", color = Color.cornflowerBlue),
             ParticipantConfiguration(name = "Ada", color = Color.hotPink),
-            ParticipantConfiguration(name = "Ebbe", color = Color.cornflowerBlue),
-            ParticipantConfiguration(name = "Marie", color = Color.mediumVioletRed)
+            ParticipantConfiguration(name = "Ebbe", color = Color.sandyBrown),
+            ParticipantConfiguration(name = "Marie", color = Color.paleVioletRed)
     )
 
     override val googleCalendarIds = listOf(

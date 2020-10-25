@@ -60,7 +60,7 @@ class GoogleCalendarImporterFetcher {
     companion object {
         private const val APPLICATION_NAME = "org.steffeleffe.familycalendar"
         private val JSON_FACTORY = JacksonFactory.getDefaultInstance()
-        private const val TOKENS_DIRECTORY_PATH = "/home/steffen/GitHub/family-calendar/src/main/resources/tokens"
+        private const val TOKENS_DIRECTORY_PATH = "tokens"
 
         /**
          * Global instance of the scopes required by this quickstart.
