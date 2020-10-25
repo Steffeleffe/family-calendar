@@ -10,7 +10,7 @@ import javax.enterprise.context.ApplicationScoped
 @ApplicationScoped
 class MockCalendarImporter : CalendarImporter {
     override fun importCalender(calendarId: String, numberOfDaysToImport: Int): List<CalendarEvent> {
-        return listOf(CalendarEvent("testId", "testDescription", EventTimeRange(Date(123), Date(345))))
+        return listOf(CalendarEvent("testId", "testDescription", EventTimeRange(Date(123), Date(345)), calendarId = "calId"))
     }
 }
 

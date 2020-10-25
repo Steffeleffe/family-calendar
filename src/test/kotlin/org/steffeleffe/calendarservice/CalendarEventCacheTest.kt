@@ -13,7 +13,7 @@ class CalendarEventCacheTest {
 
     @Test
     fun `should get events`() {
-        val testEvent = CalendarEvent("test", "description", EventTimeRange(Date(123), Date(345)))
+        val testEvent = CalendarEvent("test", "description", EventTimeRange(Date(123), Date(345)), calendarId = "calId")
         val calendarId = "testCalenderUrl"
         val importerMock : CalendarImporter = mock()
         whenever(importerMock.importCalender(eq(calendarId), any())).thenReturn(mutableListOf(testEvent))
@@ -27,7 +27,7 @@ class CalendarEventCacheTest {
 
     @Test
     fun `should get no events`() {
-        val testEvent = CalendarEvent("test", "description", EventTimeRange(Date(123), Date(345)))
+        val testEvent = CalendarEvent("test", "description", EventTimeRange(Date(123), Date(345)), calendarId = "calId")
         val calendarId = "testCalenderUrl"
         val importerMock : CalendarImporter = mock()
         whenever(importerMock.importCalender(eq(calendarId), any())).thenReturn(mutableListOf(testEvent))
@@ -40,7 +40,7 @@ class CalendarEventCacheTest {
 
     @Test
     fun `should use cached events`() {
-        val testEvent = CalendarEvent("test", "description", EventTimeRange(Date(123), Date(345)))
+        val testEvent = CalendarEvent("test", "description", EventTimeRange(Date(123), Date(345)), calendarId = "calId")
         val calendarId = "testCalenderUrl"
         val importerMock : CalendarImporter = mock()
         whenever(importerMock.importCalender(eq(calendarId), any())).thenReturn(mutableListOf(testEvent))
@@ -55,7 +55,7 @@ class CalendarEventCacheTest {
 
     @Test
     fun `get after invalidate`() {
-        val testEvent = CalendarEvent("test", "description", EventTimeRange(Date(123), Date(345)))
+        val testEvent = CalendarEvent("test", "description", EventTimeRange(Date(123), Date(345)), calendarId = "calId")
         val calendarId = "testCalenderUrl"
         val importerMock : CalendarImporter = mock()
         whenever(importerMock.importCalender(eq(calendarId), any())).thenReturn(mutableListOf(testEvent))

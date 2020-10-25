@@ -15,6 +15,5 @@ class CssResourceTest {
                 .then()
                 .statusCode(200)
                 .body(CoreMatchers.containsString("body {"))
-                .body(CoreMatchers.containsString("grid-template-columns: [timeSlot] auto"))
     }
 }
