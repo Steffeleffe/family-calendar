@@ -20,10 +20,10 @@ open class HtmlResource (val calendarService: CalendarService){
         val createHTML = createHTML(true, true)
         createHTML.head {
             styleLink("/style.css")
-//            meta {
-//                httpEquiv = "refresh"
-//                content = "30"
-//            }
+            meta {
+                httpEquiv = "refresh"
+                content = "30"
+            }
             meta("google", "notranslate")
         }
         createHTML.body {
